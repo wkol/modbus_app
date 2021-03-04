@@ -9,11 +9,11 @@ import com.example.modbus.databinding.ReadingRowLayoutBinding
 
 class CategoryAdapter(val categories: MutableList<Category>) :
     RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
-
     inner class CategoryViewHolder(val binding: CatergoryRowLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(data: Category) {
             binding.category = data
+            binding.readingRecycler.visibility = if (data.isExpanded) View.VISIBLE else View.GONE
             binding.executePendingBindings()
         }
     }
@@ -29,21 +29,20 @@ class CategoryAdapter(val categories: MutableList<Category>) :
         val adapter = ValueAdapter(categories[position].elements.toMutableList())
         holder.binding.readingRecycler.adapter = adapter
         holder.binding.textView.setOnClickListener {
-            if(categories[position].isExpanded) {
+            if (categories[position].isExpanded) {
                 collapseCategory(position, holder.binding)
             } else {
                 expandCategory(position, holder.binding)
             }
         }
         holder.binding.imgArrow.setOnClickListener {
-            if(categories[position].isExpanded) {
+            if (categories[position].isExpanded) {
                 collapseCategory(position, holder.binding)
             } else {
                 expandCategory(position, holder.binding)
             }
         }
     }
-
 
     private fun expandCategory(position: Int, binding: CatergoryRowLayoutBinding) {
         binding.readingRecycler.visibility = View.VISIBLE
@@ -56,12 +55,11 @@ class CategoryAdapter(val categories: MutableList<Category>) :
     }
 
     override fun getItemCount(): Int = categories.size
-
-}
+    }
 
 class ValueAdapter(var values: MutableList<ValueElement>) :
         RecyclerView.Adapter<ValueAdapter.ValuesViewHolder>() {
-    inner class ValuesViewHolder(val binding: ReadingRowLayoutBinding): RecyclerView.ViewHolder(
+    inner class ValuesViewHolder(val binding: ReadingRowLayoutBinding) : RecyclerView.ViewHolder(
         binding.root
     ) {
         fun bind(data: ValueElement) {
@@ -69,7 +67,6 @@ class ValueAdapter(var values: MutableList<ValueElement>) :
             binding.executePendingBindings()
         }
     }
-
 
     override fun onCreateViewHolder(parent: ViewGroup, position: Int): ValuesViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -80,5 +77,4 @@ class ValueAdapter(var values: MutableList<ValueElement>) :
     override fun onBindViewHolder(holder: ValuesViewHolder, position: Int) = holder.bind(values[position])
 
     override fun getItemCount(): Int = values.size
-
         }

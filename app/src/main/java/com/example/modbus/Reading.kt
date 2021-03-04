@@ -2,42 +2,43 @@ package com.example.modbus
 
 data class ValueElement(val label: String, val unit: String, val value: String)
 
-class Reading(var date: String,
-              var voltage_13: Double = 0.0,
-              var voltage_12: Double = 0.0,
-              var voltage_23: Double = 0.0,
-              var current_l1: Double = 0.0,
-              var current_l2: Double = 0.0,
-              var current_l3: Double = 0.0,
-              var total_power: Double = 0.0,
-              var total_reactive_power: Double = 0.0,
-              var total_apparent_power: Double = 0.0,
-              var frequency: Double = 0.0,
-              var total_cos: Double = 0.0,
-              var current_n: Double = 0.0,
-              var input_EA: Double = 0.0,
-              var input_EA_MSB: Double = 0.0,
-              var return_EA: Double = 0.0,
-              var return_EA_MSB: Double = 0.0,
-              var ind_EQ: Double = 0.0,
-              var ind_EQ_MSB: Double = 0.0,
-              var cap_EQ: Double = 0.0,
-              var cap_EQ_MSB: Double = 0.0,
-              var voltage_l1: Double = 0.0,
-              var voltage_l2: Double = 0.0,
-              var voltage_l3: Double = 0.0,
-              var power_l1: Double = 0.0,
-              var power_l2: Double = 0.0,
-              var power_l3: Double = 0.0,
-              var reactive_power_l1: Double = 0.0,
-              var reactive_power_l2: Double = 0.0,
-              var reactive_power_l3: Double = 0.0,
-              var cos_l1: Double = 0.0,
-              var cos_l2: Double = 0.0,
-              var cos_l3: Double = 0.0
+class Reading(
+    var date: String,
+    var voltage_13: Double = 0.0,
+    var voltage_12: Double = 0.0,
+    var voltage_23: Double = 0.0,
+    var current_l1: Double = 0.0,
+    var current_l2: Double = 0.0,
+    var current_l3: Double = 0.0,
+    var total_power: Double = 0.0,
+    var total_reactive_power: Double = 0.0,
+    var total_apparent_power: Double = 0.0,
+    var frequency: Double = 0.0,
+    var total_cos: Double = 0.0,
+    var current_n: Double = 0.0,
+    var input_EA: Double = 0.0,
+    var input_EA_MSB: Double = 0.0,
+    var return_EA: Double = 0.0,
+    var return_EA_MSB: Double = 0.0,
+    var ind_EQ: Double = 0.0,
+    var ind_EQ_MSB: Double = 0.0,
+    var cap_EQ: Double = 0.0,
+    var cap_EQ_MSB: Double = 0.0,
+    var voltage_l1: Double = 0.0,
+    var voltage_l2: Double = 0.0,
+    var voltage_l3: Double = 0.0,
+    var power_l1: Double = 0.0,
+    var power_l2: Double = 0.0,
+    var power_l3: Double = 0.0,
+    var reactive_power_l1: Double = 0.0,
+    var reactive_power_l2: Double = 0.0,
+    var reactive_power_l3: Double = 0.0,
+    var cos_l1: Double = 0.0,
+    var cos_l2: Double = 0.0,
+    var cos_l3: Double = 0.0
 ) {
     fun getValueElements(): List<ValueElement> {
-        return listOf(//ValueElement("Czas odczytu:", "", date.replace("T", " ")),
+        return listOf(
                 ValueElement("Napięcie 13:", "V", voltage_13.toString()),
                 ValueElement("Napięcie 12:", "V", voltage_12.toString()),
                 ValueElement("Napięcie 23:", "V", voltage_23.toString()),
@@ -73,19 +74,7 @@ class Reading(var date: String,
         )
     }
     fun createCategories(): List<Category> {
-        return  listOf(
-            Category("Napięcia", listOf(
-                ValueElement("Napięcie 13:", "V", voltage_13.toString()),
-                ValueElement("Napięcie 12:", "V", voltage_12.toString()),
-                ValueElement("Napięcie 23:", "V", voltage_23.toString()),
-                ValueElement("Napięcie l1:", "V", voltage_l1.toString()),
-                ValueElement("Napięcie l2:", "V", voltage_l2.toString()),
-                ValueElement("Napięcie l3:", "V", voltage_l3.toString()))),
-            Category("Natężenia", listOf(
-                ValueElement("Natężenie l1:", "A", current_l1.toString()),
-                ValueElement("Natężenie l2:", "A", current_l2.toString()),
-                ValueElement("Natężenie l3:", "A", current_l3.toString()),
-                ValueElement("Natężenie n:", "A", current_n.toString()))),
+        return listOf(
             Category("Moce", listOf(
                 ValueElement("Moc całkowita:", "kW", total_power.toString()),
                 ValueElement("Moc całkowita bierna:", "kvar", total_reactive_power.toString()),
@@ -105,6 +94,18 @@ class Reading(var date: String,
                 ValueElement("EQ indukcyjna MSB:", "kvarh", ind_EQ_MSB.toString()),
                 ValueElement("EQ pojemnościowa:", "kvarh", cap_EQ.toString()),
                 ValueElement("EQ pojemnościowa MSB:", "kvarh", cap_EQ_MSB.toString()))),
+            Category("Napięcia", listOf(
+                ValueElement("Napięcie 13:", "V", voltage_13.toString()),
+                ValueElement("Napięcie 12:", "V", voltage_12.toString()),
+                ValueElement("Napięcie 23:", "V", voltage_23.toString()),
+                ValueElement("Napięcie l1:", "V", voltage_l1.toString()),
+                ValueElement("Napięcie l2:", "V", voltage_l2.toString()),
+                ValueElement("Napięcie l3:", "V", voltage_l3.toString()))),
+            Category("Natężenia", listOf(
+                ValueElement("Natężenie l1:", "A", current_l1.toString()),
+                ValueElement("Natężenie l2:", "A", current_l2.toString()),
+                ValueElement("Natężenie l3:", "A", current_l3.toString()),
+                ValueElement("Natężenie n:", "A", current_n.toString()))),
             Category("Inne", listOf(
                 ValueElement("Cos l1:", "", cos_l1.toString()),
                 ValueElement("Cos l2:", "", cos_l2.toString()),
@@ -117,6 +118,4 @@ class Reading(var date: String,
     }
 }
 
-data class Category(val name: String, val elements: List<ValueElement>, var isExpanded: Boolean = false)
-
-
+data class Category(val name: String, var elements: List<ValueElement>, var isExpanded: Boolean = false)

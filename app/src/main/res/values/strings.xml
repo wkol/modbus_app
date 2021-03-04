@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Modbus Data</string>
+    <string name="date_tools">DATA</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
