@@ -2,14 +2,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-    <data>
-        <variable
-            name="category"
-            type="com.example.modbus.Category" />
-        <variable
-            name="valueElement"
-            type="com.example.modbus.ValueElement" />
-    </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -19,13 +11,14 @@
             android:layout_width="200dp"
             android:layout_height="40dp"
             android:layout_marginStart="32dp"
-            android:text="@{category.name}"
+            android:text=""
             tools:text="CATEGORY"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             style="@style/DataText"
             android:textSize="24sp"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toTopOf="@+id/divider" />
 
         <ImageView
             android:id="@+id/img_arrow"
@@ -42,19 +35,6 @@
             app:layout_constraintStart_toEndOf="@+id/textView"
             app:layout_constraintHorizontal_bias="0.705" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="@+id/textView"
-            app:layout_constraintEnd_toEndOf="@+id/img_arrow"
-            app:layoutManager="LinearLayoutManager"
-            android:id="@+id/reading_recycler"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView"
-            android:layout_marginTop="8dp"
-            android:visibility="gone"
-            tools:visibility="visible" />
-
         <View
             android:id="@+id/divider"
             android:layout_width="wrap_content"
@@ -63,9 +43,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintTop_toBottomOf="@+id/reading_recycler"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_bias="0.050000012" />
+            app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

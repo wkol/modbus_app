@@ -7,7 +7,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.modbus.databinding.ActivityMainBinding
 import retrofit2.Call
 import retrofit2.Callback
@@ -15,15 +14,14 @@ import retrofit2.Response
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private val data: MutableList<Category> = Reading("2020-01-01T12:00:00").createCategories().toMutableList()
+    private var data: MutableList<Any> = Reading("2020-01-01T12:00:00").getCategoriesList().toMutableList()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        updateData()
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.categoryRecycle.adapter = CategoryAdapter(data)
-        binding.categoryRecycle.adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         binding.categoryRecycle.setHasFixedSize(true)
         binding.categoryRecycle.layoutManager = LinearLayoutManager(this)
+        updateData()
         val delay = 20000
         val handler = Handler(Looper.getMainLooper())
         handler.postDelayed(object : Runnable {
@@ -39,10 +37,9 @@ class MainActivity : AppCompatActivity() {
         val call = request.getLastReading()
         call.enqueue(object : Callback<Reading> {
             override fun onResponse(call: Call<Reading>, response: Response<Reading>) {
-                if (response.isSuccessful) {
-                    val newData = response.body()!!.createCategories()
-                    data.forEachIndexed { index, category -> category.elements = newData[index].elements }
-                    binding.categoryRecycle.adapter!!.notifyItemRangeChanged(1, 5)
+                if (response.isSuccessful && response.body() != null) {
+                    val newData = response.body()!!.getCategoriesList()
+                    (binding.categoryRecycle.adapter as CategoryAdapter).updateData(newData)
                     binding.dateView.text = response.body()!!.getDateString()
                     Toast.makeText(this@MainActivity, "Dane zaktualizowane", Toast.LENGTH_SHORT)
                         .show()
