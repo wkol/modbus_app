@@ -1,5 +1,10 @@
 package com.example.modbus
 
+import com.github.mikephil.charting.components.AxisBase
+import com.github.mikephil.charting.formatter.ValueFormatter
+import java.text.SimpleDateFormat
+import java.util.Date
+
 data class ValueElement(val label: String, val unit: String, val value: String)
 
 class Reading(
@@ -90,7 +95,8 @@ class Reading(
                     ValueElement("Częstotliwość:", "Hz", frequency.toString()),
                     ValueElement("Cos całkowity:", "", total_cos.toString())
                 )
-            ))
+            )
+        )
     }
     fun getFlattenCategories(): List<Any> {
         val x = mutableListOf<Any>()
@@ -107,7 +113,8 @@ class Reading(
                     ValueElement("Moc bierna l2:", "kvar", reactive_power_l2.toString()),
                     ValueElement("Moc bierna l3", "kvar", reactive_power_l3.toString())
                 )
-            ).flattenCategory())
+            ).flattenCategory()
+        )
         x.addAll(
             Category(
                 "Energie", listOf(
@@ -120,7 +127,8 @@ class Reading(
                     ValueElement("EQ pojemnościowa:", "kvarh", cap_EQ.toString()),
                     ValueElement("EQ pojemnościowa MSB:", "kvarh", cap_EQ_MSB.toString())
                 )
-            ).flattenCategory())
+            ).flattenCategory()
+        )
         x.addAll(
             Category(
                 "Napięcia", listOf(
@@ -131,7 +139,8 @@ class Reading(
                     ValueElement("Napięcie l2:", "V", voltage_l2.toString()),
                     ValueElement("Napięcie l3:", "V", voltage_l3.toString())
                 )
-            ).flattenCategory())
+            ).flattenCategory()
+        )
         x.addAll(
             Category(
                 "Natężenia", listOf(
@@ -140,7 +149,8 @@ class Reading(
                     ValueElement("Natężenie l3:", "A", current_l3.toString()),
                     ValueElement("Natężenie n:", "A", current_n.toString())
                 )
-            ).flattenCategory())
+            ).flattenCategory()
+        )
         x.addAll(
             Category(
                 "Inne", listOf(
@@ -168,5 +178,21 @@ data class Category(
         val x = mutableListOf<Any>(this)
         x.addAll(elements)
         return x
+    }
+}
+
+
+class AxisDateFormatter(val startDate: String): ValueFormatter() {
+    override fun getFormattedValue(value: Float): String {
+        val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+        val newFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        val originalTimestamp: Long = (format.parse(startDate) as Date).time + value.toLong()
+        val dateNew = Date()
+        return try {
+            dateNew.time = originalTimestamp
+            newFormat.format(dateNew).toString()
+        } catch (ex: Exception) {
+            "xx"
+        }
     }
 }
