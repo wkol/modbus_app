@@ -1,6 +1,5 @@
 package com.example.modbus
 
-import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.formatter.ValueFormatter
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -167,6 +166,42 @@ class Reading(
     fun getDateString(): String {
         return date.replace("T", " ")
     }
+
+    fun getFieldsList(): List<Double> {
+        return listOf(voltage_13,
+        voltage_12,
+        voltage_23,
+        current_l1,
+        current_l2,
+        current_l3,
+        total_power,
+        total_reactive_power,
+        total_apparent_power,
+        frequency,
+        total_cos,
+        current_n,
+        input_EA,
+        input_EA_MSB,
+        return_EA,
+        return_EA_MSB,
+        ind_EQ,
+        ind_EQ_MSB,
+        cap_EQ,
+        cap_EQ_MSB,
+        voltage_l1,
+        voltage_l2,
+        voltage_l3,
+        power_l1,
+        power_l2,
+        power_l3,
+        reactive_power_l1,
+        reactive_power_l2,
+        reactive_power_l3,
+        cos_l1,
+        cos_l2,
+        cos_l3
+        )
+    }
 }
 
 data class Category(
@@ -181,8 +216,7 @@ data class Category(
     }
 }
 
-
-class AxisDateFormatter(val startDate: String): ValueFormatter() {
+class AxisDateFormatter(val startDate: String) : ValueFormatter() {
     override fun getFormattedValue(value: Float): String {
         val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
         val newFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")

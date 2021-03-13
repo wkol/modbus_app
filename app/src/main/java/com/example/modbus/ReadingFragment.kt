@@ -2,8 +2,6 @@ package com.example.modbus
 
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,14 +23,15 @@ class ReadingFragment : Fragment() {
     private val scope = MainScope()
     private var job: Job? = null
     private var data: MutableList<Any> = Reading("2020-01-01T12:00:00").getCategoriesList().toMutableList()
-    private  lateinit var appContext: Context
+    private lateinit var appContext: Context
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         appContext = requireActivity().applicationContext
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_reading,container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_reading, container, false)
         binding.categoryRecycle.adapter = CategoryAdapter(data)
         binding.categoryRecycle.setHasFixedSize(true)
         binding.categoryRecycle.layoutManager = LinearLayoutManager(appContext)
@@ -82,7 +81,7 @@ class ReadingFragment : Fragment() {
     private fun startUpdates() {
         stopUpdates()
         job = scope.launch {
-            while(true) {
+            while (true) {
                 updateData() // the function that should be ran every second
                 delay(20000)
             }
@@ -93,4 +92,3 @@ class ReadingFragment : Fragment() {
         job = null
     }
 }
-

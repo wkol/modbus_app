@@ -4,4 +4,39 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="reading_value">Obecny pomiar</string>
     <string name="charts_nav">Wykresy</string>
+    <string name="start">Początek</string>
+    <string name="end">Koniec</string>
+    <string-array name="charts_array">
+        <item>U 13</item>
+        <item>U 12</item>
+        <item>U 23</item>
+        <item>I l1</item>
+        <item>I l2</item>
+        <item>I l3</item>
+        <item>P całk</item>
+        <item>S całk</item>
+        <item>Q całk</item>
+        <item>f</item>
+        <item>cos całk</item>
+        <item>In</item>
+        <item>EA pobrana</item>
+        <item>EA pobrana MSB</item>
+        <item>EA oddana</item>
+        <item>EA oddana MSB</item>
+        <item>EQ ind</item>
+        <item>Eq ind MSB</item>
+        <item>EQ poj</item>
+        <item>EQ poj MSB</item>
+        <item>U l1</item>
+        <item>U l2</item>
+        <item>U l3</item>
+        <item>P l1</item>
+        <item>P l2</item>
+        <item>S l1</item>
+        <item>S l2</item>
+        <item>S l3</item>
+        <item>cos l1</item>
+        <item>cos l2</item>
+        <item>cos l3</item>
+    </string-array>
 </resources>
