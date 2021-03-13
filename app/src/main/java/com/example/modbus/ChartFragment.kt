@@ -143,7 +143,7 @@ class ChartFragment : Fragment(), DateListener {
                 newData.add(Entry(convertDateToFloat(item.date, dateStart), item.getFieldsList()[pos].toFloat()))
             }
         }
-        chartMain.data = LineData(LineDataSet(newData, "Natężenie"))
+        chartMain.data = LineData(LineDataSet(newData, LABELS[pos]))
         chartMain.invalidate()
     }
 
