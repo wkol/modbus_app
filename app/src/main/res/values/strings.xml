@@ -6,37 +6,56 @@
     <string name="charts_nav">Wykresy</string>
     <string name="start">Początek</string>
     <string name="end">Koniec</string>
+    <string name="Loading">Ładowanie…</string>
+    <string name="error">Błąd danych</string>
     <string-array name="charts_array">
-        <item>U 13</item>
-        <item>U 12</item>
-        <item>U 23</item>
-        <item>I l1</item>
-        <item>I l2</item>
-        <item>I l3</item>
-        <item>P całk</item>
-        <item>S całk</item>
-        <item>Q całk</item>
-        <item>f</item>
-        <item>cos całk</item>
+        <item>P total</item>
+        <item>Q total</item>
+        <item>S total</item>
+        <item>P L1</item>
+        <item>P L2</item>
+        <item>P L3</item>
+        <item>Q L1</item>
+        <item>Q L2</item>
+        <item>Q L3</item>
+        <item>U13</item>
+        <item>U12</item>
+        <item>U23</item>
+        <item>UL1</item>
+        <item>UL2</item>
+        <item>UL3</item>
+        <item>IL1</item>
+        <item>IL2</item>
+        <item>IL3</item>
         <item>In</item>
+        <item>f</item>
+        <item>Cos total</item>
+        <item>cos L1</item>
+        <item>cos L2</item>
+        <item>cos L3</item>
         <item>EA pobrana</item>
-        <item>EA pobrana MSB</item>
         <item>EA oddana</item>
-        <item>EA oddana MSB</item>
         <item>EQ ind</item>
-        <item>Eq ind MSB</item>
-        <item>EQ poj</item>
-        <item>EQ poj MSB</item>
-        <item>U l1</item>
-        <item>U l2</item>
-        <item>U l3</item>
-        <item>P l1</item>
-        <item>P l2</item>
-        <item>S l1</item>
-        <item>S l2</item>
-        <item>S l3</item>
-        <item>cos l1</item>
-        <item>cos l2</item>
-        <item>cos l3</item>
+        <item>EQ cap</item>
+        <item>Power DC</item>
+        <item>U DC</item>
+        <item>I DC</item>
+        <item>Power ac</item>
+        <item>Moc bierna</item>
+        <item>Moc pozorna</item>
+        <item>Uac AB</item>
+        <item>Uac BC</item>
+        <item>Uac CA</item>
+        <item>Uac A</item>
+        <item>Uac B</item>
+        <item>Uac C</item>
+        <item>Iac A</item>
+        <item>Iac B</item>
+        <item>Iac C</item>
+        <item>I ac </item>
+        <item>Freq</item>
+        <item>Pf</item>
+        <item>Temp.radiatora</item>
+        <item>Energia</item>
     </string-array>
 </resources>

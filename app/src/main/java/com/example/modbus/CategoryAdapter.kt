@@ -55,12 +55,18 @@ class CategoryAdapter(private val categoriesVisible: MutableList<Any>) :
             true -> {
                 (holder as CategoryViewHolder).bind(row)
                 holder.binding.imgArrow.setOnClickListener {
-                        when (row.isExpanded) {
-                            true -> collapseRow(position)
-                            else -> expandRow(position)
-                        }
+                    when (row.isExpanded) {
+                        true -> collapseRow(position)
+                        else -> expandRow(position)
                     }
                 }
+                holder.binding.textView.setOnClickListener {
+                    when (row.isExpanded) {
+                        true -> collapseRow(position)
+                        else -> expandRow(position)
+                    }
+                }
+            }
             false -> (holder as ReadingViewHolder).bind(row as ValueElement)
         }
     }
@@ -103,6 +109,6 @@ class CategoryAdapter(private val categoriesVisible: MutableList<Any>) :
             }
         }
         notifyItemRangeChanged(0, itemCount)
-        }
-    override fun getItemCount(): Int = categoriesVisible.size
     }
+    override fun getItemCount(): Int = categoriesVisible.size
+}
