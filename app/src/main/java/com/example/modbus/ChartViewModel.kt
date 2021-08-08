@@ -1,15 +1,14 @@
 package com.example.modbus
 
+import android.view.View
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.github.mikephil.charting.data.Entry
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Date
-import java.util.Locale
+import timber.log.Timber
 
 val LABELS = listOf(
     "Moc czynna z sieci", "Moc bierna z sieci", "Moc pozorna z sieci", "Moc czynna L1",
@@ -22,62 +21,87 @@ val LABELS = listOf(
     "Napięcie UBC inw.", "Napięcie UCA inw.", "Napięcie UA inw.", "Napięcie UB inw.",
     "Napięcie UC inw.", "Prąd IA inw.", "Prąd IB inw.", "Prąd IC inw.", "Prad średni inw.",
     "Częst. Inwe.", "Cosinus inw.", "Temperatura radiatora", "Energia"
-
 )
 
+val API_VALUES = listOf(
+    "total_power", "total_reactive_power", "total_apparent_power", "power_l1",
+    "power_l2", "power_l3", "reactive_power_l1", "reactive_power_l2", "reactive_power_l3",
+    "voltage_13", "voltage_12", "voltage_23", "voltage_l1", "voltage_l2", "voltage_l3",
+    "current_l1", "current_l2", "current_l3", "current_n", "frequency", "total_cos", "cos_l1", "cos_l2",
+    "cos_l3", "input_ea", "return_ea", "ind_eq",
+    "cap_eq", "power_dc", "voltage_dc", "current_dc",
+    "power_inv", "reactive_power_inv", "apparent_power_inv", "voltage_uab_inv",
+    "voltage_ubc_inv", "voltage_uca_inv", "voltage_ua_inv", "voltage_ub_inv",
+    "voltage_uc_inv", "current_a_inv", "current_b_inv", "current_c_inv", "current_avg_inv",
+    "frequency_inv", "cos_inv", "heat_sink_temp_inv", "energy"
+)
+
+
 class ChartViewModel() : ViewModel(), DateListener {
-    private val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.US)
-    var dateStart: MutableLiveData<String> = MutableLiveData(dateFormat.format(0L))
-    var dateEnd: MutableLiveData<String> = MutableLiveData(dateFormat.format(Calendar.getInstance().time))
-    private var readings: List<Reading> = emptyList()
-    var data: Array<MutableList<Entry>> = Array(48) { mutableListOf() }
-    var currentChart: MutableLiveData<Int> = MutableLiveData()
-    var isLoaded: MutableLiveData<Boolean> = MutableLiveData(false)
-    init {
-        getReadings()
+
+    private var _chartSelection: Int = 0
+    val chartSelection: Int
+        get() = _chartSelection
+
+    private val _chartData = MutableLiveData<MutableList<Entry>>(emptyList<Entry>().toMutableList())
+    val chartData: MutableLiveData<MutableList<Entry>>
+        get() = _chartData
+
+
+    private val _dateStart: MutableLiveData<String> = MutableLiveData("Start")
+    val dateStart: LiveData<String>
+        get() = _dateStart
+
+
+    private val _dateEnd: MutableLiveData<String> = MutableLiveData("Koniec")
+    val dateEnd: LiveData<String>
+        get() = _dateEnd
+
+    private val _loading: MutableLiveData<Int> = MutableLiveData(View.GONE)
+    val loading: LiveData<Int>
+        get() = _loading
+
+    override fun onDatePositiveSelected(date: String, tag: String) {
+        if (tag == "startDate") {
+            _dateStart.value = date
+        } else {
+            _dateEnd.value = date
+        }
+        changeChartSelection(_chartSelection)
     }
 
-    fun getReadings() {
+    private fun getChartFromApi() {
+
         val request = ServiceBuilder.buildService(ModbusEndpoints::class.java)
-        val call = request.getReadings()
-        call.enqueue(object : Callback<List<Reading>> {
-            override fun onResponse(call: Call<List<Reading>>, response: Response<List<Reading>>) {
-                if (response.isSuccessful) {
-                    readings = response.body() as List<Reading>
-                    dateStart.value = response.body()!![0].date
-                    updateDates()
-                    isLoaded.value = true
-                    currentChart.value = 0
+        val call = request.getChartReadings(API_VALUES[_chartSelection], _dateStart.value!!, _dateEnd.value!!)
+        call.enqueue(object : Callback<List<ChartReading>> {
+            override fun onResponse(call: Call<List<ChartReading>>, response: Response<List<ChartReading>>) {
+                if (response.isSuccessful && response.body() != null) {
+                    updateDates(response.body()!!)
+                    Timber.i(response.message())
                 }
             }
-            override fun onFailure(call: Call<List<Reading>>, t: Throwable) {
-                readings = emptyList()
+            override fun onFailure(call: Call<List<ChartReading>>, t: Throwable) {
+                Timber.e(t)
             }
         })
     }
 
-    override fun onDatePositiveSelected(date: String, tag: String) {
-        if (tag == "startDate") {
-            dateStart.value = date
-            currentChart.value = currentChart.value!!
-        } else {
-            dateEnd.value = date
-            currentChart.value = currentChart.value!!
+    fun changeChartSelection(newId: Int) {
+        _chartSelection = newId
+        if(_dateEnd.value != "Koniec" && _dateStart.value != "Start") {
+            _loading.value = View.VISIBLE
+            getChartFromApi()
         }
     }
 
-    private fun convertDateToFloat(date: String, firstDate: String): Float {
-        val dateTimestamp = (dateFormat.parse(date) as Date).time - (dateFormat.parse(firstDate) as Date).time
-        return dateTimestamp.toFloat()
-    }
 
-    fun updateDates() {
+
+    fun updateDates(data: List<ChartReading>) {
         val newData: MutableList<Entry> = mutableListOf()
-        for (item in readings) {
-            if (convertDateToFloat(item.date, dateStart.value!!) >= 0 && convertDateToFloat(item.date, dateEnd.value!!) <= 0) {
-                newData.add(Entry(convertDateToFloat(item.date, dateStart.value!!), item.getFieldsList()[currentChart.value!!].toFloat()))
-            }
-        }
-        data[currentChart.value!!] = newData
+        data.forEach { item -> newData.add(Entry(convertDateToFloat(item.date, dateStart.value!!), item.value.toFloat())) }
+        _chartData.value = newData
+        _loading.value = View.GONE
     }
+
 }
