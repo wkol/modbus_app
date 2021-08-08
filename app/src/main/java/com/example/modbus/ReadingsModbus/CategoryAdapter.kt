@@ -40,6 +40,7 @@ class CategoryAdapter(private val categoriesVisible: MutableList<Any>) :
             else -> throw Exception("Invalid viewType")
         }
     }
+
     override fun getItemViewType(position: Int): Int {
         if (categoriesVisible[position] is Category) {
             return R.layout.catergory_row_layout
@@ -104,11 +105,13 @@ class CategoryAdapter(private val categoriesVisible: MutableList<Any>) :
                 indexV = 0
                 item.elements = (newData[indexC] as Category).elements
             } else {
-                categoriesVisible[categoriesVisible.indexOf(item)] = (newData[indexC] as Category).elements[indexV]
+                categoriesVisible[categoriesVisible.indexOf(item)] =
+                    (newData[indexC] as Category).elements[indexV]
                 indexV++
             }
         }
         notifyItemRangeChanged(0, itemCount)
     }
+
     override fun getItemCount(): Int = categoriesVisible.size
 }

@@ -23,7 +23,8 @@ class ReadingFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(ReadingViewModel::class.java)
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_reading, container, false)
         binding.categoryRecycle.adapter = CategoryAdapter(viewModel.data.value ?: mutableListOf())
-        binding.categoryRecycle.layoutManager = LinearLayoutManager(requireActivity().applicationContext)
+        binding.categoryRecycle.layoutManager =
+            LinearLayoutManager(requireActivity().applicationContext)
         binding.categoryRecycle.setHasFixedSize(true)
         viewModel.data.observe(
             viewLifecycleOwner,

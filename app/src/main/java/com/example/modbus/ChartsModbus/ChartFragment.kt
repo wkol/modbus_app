@@ -64,21 +64,22 @@ class ChartFragment : Fragment() {
         }
 
 
-        binding.chartSelection.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                viewModel.changeChartSelection(position)
-                binding.progressChart.setVisibilityAfterHide(View.VISIBLE)
-            }
+        binding.chartSelection.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    viewModel.changeChartSelection(position)
+                    binding.progressChart.setVisibilityAfterHide(View.VISIBLE)
+                }
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                return
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    return
+                }
             }
-        }
         binding.startDateButton.setOnClickListener {
             DatePickerFragment(viewModel).show(childFragmentManager, "startDate")
         }
@@ -87,7 +88,7 @@ class ChartFragment : Fragment() {
         }
         viewModel.chartData.observe(
             viewLifecycleOwner, {
-                if(it.isNotEmpty()) {
+                if (it.isNotEmpty()) {
                     chartMain.xAxis.valueFormatter = AxisDateFormatter(viewModel.dateStart.value!!)
                     chartMain.data = LineData(LineDataSet(it!!, LABELS[viewModel.chartSelection]))
                     chartMain.invalidate()
@@ -111,10 +112,10 @@ class ChartFragment : Fragment() {
         inflater.inflate(R.menu.menu_chart, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
-
 }
 
-class DatePickerFragment(private val onDateSelected: DateListener) : DialogFragment(), DatePickerDialog.OnDateSetListener {
+class DatePickerFragment(private val onDateSelected: DateListener) : DialogFragment(),
+    DatePickerDialog.OnDateSetListener {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val calendar = Calendar.getInstance()

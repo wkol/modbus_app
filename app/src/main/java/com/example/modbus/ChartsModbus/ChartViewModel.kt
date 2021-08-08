@@ -24,18 +24,55 @@ val LABELS = listOf(
 )
 
 val API_VALUES = listOf(
-    "total_power", "total_reactive_power", "total_apparent_power", "power_l1",
-    "power_l2", "power_l3", "reactive_power_l1", "reactive_power_l2", "reactive_power_l3",
-    "voltage_13", "voltage_12", "voltage_23", "voltage_l1", "voltage_l2", "voltage_l3",
-    "current_l1", "current_l2", "current_l3", "current_n", "frequency", "total_cos", "cos_l1", "cos_l2",
-    "cos_l3", "input_ea", "return_ea", "ind_eq",
-    "cap_eq", "power_dc", "voltage_dc", "current_dc",
-    "power_inv", "reactive_power_inv", "apparent_power_inv", "voltage_uab_inv",
-    "voltage_ubc_inv", "voltage_uca_inv", "voltage_ua_inv", "voltage_ub_inv",
-    "voltage_uc_inv", "current_a_inv", "current_b_inv", "current_c_inv", "current_avg_inv",
-    "frequency_inv", "cos_inv", "heat_sink_temp_inv", "energy"
+    "total_power",
+    "total_reactive_power",
+    "total_apparent_power",
+    "power_l1",
+    "power_l2",
+    "power_l3",
+    "reactive_power_l1",
+    "reactive_power_l2",
+    "reactive_power_l3",
+    "voltage_13",
+    "voltage_12",
+    "voltage_23",
+    "voltage_l1",
+    "voltage_l2",
+    "voltage_l3",
+    "current_l1",
+    "current_l2",
+    "current_l3",
+    "current_n",
+    "frequency",
+    "total_cos",
+    "cos_l1",
+    "cos_l2",
+    "cos_l3",
+    "input_ea",
+    "return_ea",
+    "ind_eq",
+    "cap_eq",
+    "power_dc",
+    "voltage_dc",
+    "current_dc",
+    "power_inv",
+    "reactive_power_inv",
+    "apparent_power_inv",
+    "voltage_uab_inv",
+    "voltage_ubc_inv",
+    "voltage_uca_inv",
+    "voltage_ua_inv",
+    "voltage_ub_inv",
+    "voltage_uc_inv",
+    "current_a_inv",
+    "current_b_inv",
+    "current_c_inv",
+    "current_avg_inv",
+    "frequency_inv",
+    "cos_inv",
+    "heat_sink_temp_inv",
+    "energy"
 )
-
 
 class ChartViewModel() : ViewModel(), DateListener {
 
@@ -47,11 +84,9 @@ class ChartViewModel() : ViewModel(), DateListener {
     val chartData: MutableLiveData<MutableList<Entry>>
         get() = _chartData
 
-
     private val _dateStart: MutableLiveData<String> = MutableLiveData("Start")
     val dateStart: LiveData<String>
         get() = _dateStart
-
 
     private val _dateEnd: MutableLiveData<String> = MutableLiveData("Koniec")
     val dateEnd: LiveData<String>
@@ -73,14 +108,22 @@ class ChartViewModel() : ViewModel(), DateListener {
     private fun getChartFromApi() {
 
         val request = ServiceBuilder.buildService(ModbusEndpoints::class.java)
-        val call = request.getChartReadings(API_VALUES[_chartSelection], _dateStart.value!!, _dateEnd.value!!)
+        val call = request.getChartReadings(
+            API_VALUES[_chartSelection],
+            _dateStart.value!!,
+            _dateEnd.value!!
+        )
         call.enqueue(object : Callback<List<ChartReading>> {
-            override fun onResponse(call: Call<List<ChartReading>>, response: Response<List<ChartReading>>) {
+            override fun onResponse(
+                call: Call<List<ChartReading>>,
+                response: Response<List<ChartReading>>
+            ) {
                 if (response.isSuccessful && response.body() != null) {
                     updateDates(response.body()!!)
                     Timber.i(response.message())
                 }
             }
+
             override fun onFailure(call: Call<List<ChartReading>>, t: Throwable) {
                 Timber.e(t)
             }
@@ -89,19 +132,23 @@ class ChartViewModel() : ViewModel(), DateListener {
 
     fun changeChartSelection(newId: Int) {
         _chartSelection = newId
-        if(_dateEnd.value != "Koniec" && _dateStart.value != "Start") {
+        if (_dateEnd.value != "Koniec" && _dateStart.value != "Start") {
             _loading.value = View.VISIBLE
             getChartFromApi()
         }
     }
 
-
-
     fun updateDates(data: List<ChartReading>) {
         val newData: MutableList<Entry> = mutableListOf()
-        data.forEach { item -> newData.add(Entry(convertDateToFloat(item.date, dateStart.value!!), item.value.toFloat())) }
+        data.forEach { item ->
+            newData.add(
+                Entry(
+                    convertDateToFloat(item.date, dateStart.value!!),
+                    item.value.toFloat()
+                )
+            )
+        }
         _chartData.value = newData
         _loading.value = View.GONE
     }
-
 }
