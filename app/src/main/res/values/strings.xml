@@ -1,13 +1,8 @@
 <resources>
     <string name="app_name">Modbus Data</string>
-    <string name="date_tools">DATA</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="reading_value">Obecny pomiar</string>
     <string name="charts_nav">Wykresy</string>
     <string name="start">Początek</string>
-    <string name="end">Koniec</string>
-    <string name="Loading">Ładowanie…</string>
-    <string name="error">Błąd danych</string>
     <string-array name="charts_array">
         <item>P total</item>
         <item>Q total</item>
