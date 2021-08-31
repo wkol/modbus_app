@@ -6,7 +6,7 @@
 
         <variable
             name="readingViewModel"
-            type="com.example.modbus.ReadingViewModel" />
+            type="com.example.modbus.readingsModbus.ReadingViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

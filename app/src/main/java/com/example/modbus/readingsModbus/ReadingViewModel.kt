@@ -1,9 +1,12 @@
-package com.example.modbus
+package com.example.modbus.readingsModbus
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.modbus.networkUtilities.ModbusEndpoints
+import com.example.modbus.networkUtilities.Reading
+import com.example.modbus.networkUtilities.ServiceBuilder
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import retrofit2.Call
@@ -11,19 +14,26 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class ReadingViewModel : ViewModel() {
-    private val _data: MutableLiveData<MutableList<Any>> = MutableLiveData()
+
+    // Property storing the current reading
+    private val _data: MutableLiveData<MutableList<Any>> =
+        MutableLiveData(Reading("2020-01-01T12:00:00").getCategoriesList().toMutableList())
     val data: LiveData<MutableList<Any>>
         get() = _data
 
-    private val _date: MutableLiveData<String> = MutableLiveData()
+    private val _date: MutableLiveData<String> = MutableLiveData("Loading...")
     val date: LiveData<String>
         get() = _date
+
+    init {
+        getData()
+    }
 
     fun updateData() {
         viewModelScope.launch {
             while (true) {
                 getData()
-                delay(1000L)
+                delay(10000L)
             }
         }
     }

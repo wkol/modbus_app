@@ -5,7 +5,7 @@
     <data>
         <variable
             name="valueElement"
-            type="com.example.modbus.ValueElement" />
+            type="com.example.modbus.networkUtilities.ValueElement" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
