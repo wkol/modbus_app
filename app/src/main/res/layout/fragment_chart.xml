@@ -5,7 +5,7 @@
     <data>
         <variable
             name="chartViewModel"
-            type="com.example.modbus.ChartViewModel" />
+            type="com.example.modbus.chartsModbus.ChartViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -68,9 +68,9 @@
             app:layout_constraintEnd_toStartOf="@+id/start_date_button"
             android:layout_marginStart="16dp"
             android:entries="@array/charts_array"
-            android:background="@drawable/spinner_border"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="8dp"
+            android:spinnerMode="dropdown" />
 
         <com.google.android.material.progressindicator.LinearProgressIndicator
             android:layout_width="match_parent"
