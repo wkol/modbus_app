@@ -1,9 +1,14 @@
-package com.example.modbus
+package com.example.modbus.chartsModbus
 
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.modbus.API_DATE_FORMAT
+import com.example.modbus.ChartReading
+import com.example.modbus.convertDateToFloat
+import com.example.modbus.networkUtilities.ModbusEndpoints
+import com.example.modbus.networkUtilities.ServiceBuilder
 import com.github.mikephil.charting.data.Entry
 import retrofit2.Call
 import retrofit2.Callback
@@ -74,24 +79,29 @@ val API_VALUES = listOf(
     "energy"
 )
 
-class ChartViewModel() : ViewModel(), DateListener {
+class ChartViewModel : ViewModel(), DateListener {
 
+    // Property storing selected chart
     private var _chartSelection: Int = 0
     val chartSelection: Int
         get() = _chartSelection
 
-    private val _chartData = MutableLiveData<MutableList<Entry>>(emptyList<Entry>().toMutableList())
+    // Property storing chart values
+    private val _chartData = MutableLiveData(emptyList<Entry>().toMutableList())
     val chartData: MutableLiveData<MutableList<Entry>>
         get() = _chartData
 
+    // Property storing chart's period starting date
     private val _dateStart: MutableLiveData<String> = MutableLiveData("Start")
     val dateStart: LiveData<String>
         get() = _dateStart
 
+    // Property storing chart's period ending date
     private val _dateEnd: MutableLiveData<String> = MutableLiveData("Koniec")
     val dateEnd: LiveData<String>
         get() = _dateEnd
 
+    // Property storing chart's loading state
     private val _loading: MutableLiveData<Int> = MutableLiveData(View.GONE)
     val loading: LiveData<Int>
         get() = _loading
@@ -105,8 +115,8 @@ class ChartViewModel() : ViewModel(), DateListener {
         changeChartSelection(_chartSelection)
     }
 
+    // Method allowing to get and parse  the chart data from api
     private fun getChartFromApi() {
-
         val request = ServiceBuilder.buildService(ModbusEndpoints::class.java)
         val call = request.getChartReadings(
             API_VALUES[_chartSelection],
@@ -130,6 +140,7 @@ class ChartViewModel() : ViewModel(), DateListener {
         })
     }
 
+    // Method allowing to change the selected chart
     fun changeChartSelection(newId: Int) {
         _chartSelection = newId
         if (_dateEnd.value != "Koniec" && _dateStart.value != "Start") {
@@ -138,8 +149,12 @@ class ChartViewModel() : ViewModel(), DateListener {
         }
     }
 
+    // Method which updates data to match selected dates
     fun updateDates(data: List<ChartReading>) {
         val newData: MutableList<Entry> = mutableListOf()
+        data.sortedBy {
+            API_DATE_FORMAT.parse(it.date)!!
+        }
         data.forEach { item ->
             newData.add(
                 Entry(

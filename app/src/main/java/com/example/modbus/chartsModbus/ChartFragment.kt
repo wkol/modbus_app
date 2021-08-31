@@ -1,9 +1,9 @@
-package com.example.modbus
+package com.example.modbus.chartsModbus
 
 import android.app.DatePickerDialog
 import android.app.Dialog
-import android.content.Context
 import android.content.res.Configuration
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -19,6 +19,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.modbus.AxisDateFormatter
+import com.example.modbus.NO_TIME_DATE_FORMAT
+import com.example.modbus.R
 import com.example.modbus.databinding.FragmentChartBinding
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
@@ -28,7 +31,6 @@ import java.util.Calendar
 
 class ChartFragment : Fragment() {
     private lateinit var binding: FragmentChartBinding
-    private lateinit var appContext: Context
     private lateinit var chartMain: LineChart
     private lateinit var viewModel: ChartViewModel
     override fun onCreateView(
@@ -36,8 +38,8 @@ class ChartFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         setHasOptionsMenu(true)
+
         // Get ViewModel
         viewModel = ViewModelProvider(this).get(ChartViewModel::class.java)
 
@@ -46,23 +48,31 @@ class ChartFragment : Fragment() {
         binding.chartViewModel = viewModel
         binding.lifecycleOwner = this
         binding.progressChart.setVisibilityAfterHide(View.GONE)
+
         // Set up charts options
         chartMain = binding.mainChart
         chartMain.description.isEnabled = false
         chartMain.xAxis.labelRotationAngle = 24F
         chartMain.xAxis.position = XAxis.XAxisPosition.BOTTOM
         chartMain.xAxis.labelCount = 3
+        if (resources.configuration.uiMode and
+            Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+        ) {
+            chartMain.xAxis.textColor = Color.WHITE
+            chartMain.axisLeft.textColor = Color.WHITE
+            chartMain.axisRight.textColor = Color.WHITE
+            chartMain.legend.textColor = Color.WHITE
+        }
 
         // Create spinner for selecting chart's data
         ArrayAdapter.createFromResource(
             requireActivity().applicationContext,
             R.array.charts_array,
-            android.R.layout.simple_spinner_item
+            R.layout.chart_selection_spinner
         ).also { adapter ->
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.chartSelection.adapter = adapter
         }
-
 
         binding.chartSelection.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
@@ -80,12 +90,16 @@ class ChartFragment : Fragment() {
                     return
                 }
             }
+
+        // Set listeners for date pickers
         binding.startDateButton.setOnClickListener {
             DatePickerFragment(viewModel).show(childFragmentManager, "startDate")
         }
         binding.endDateButton.setOnClickListener {
             DatePickerFragment(viewModel).show(childFragmentManager, "endDate")
         }
+
+        // Observe chart's changes
         viewModel.chartData.observe(
             viewLifecycleOwner, {
                 if (it.isNotEmpty()) {
@@ -97,6 +111,7 @@ class ChartFragment : Fragment() {
             }
         )
 
+        // Hide buttons in the landscape mode
         if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             chartMain.xAxis.textSize = 0.2f
             binding.endDateButton.visibility = View.GONE
