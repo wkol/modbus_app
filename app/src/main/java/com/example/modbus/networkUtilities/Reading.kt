@@ -1,9 +1,7 @@
-package com.example.modbus
+package com.example.modbus.networkUtilities
 
 data class ValueElement(val label: String, val unit: String, val value: String)
-
 data class Reading(
-    var id: Int,
     var date: String,
     var total_power: Double = 0.0,
     var total_reactive_power: Double = 0.0,
@@ -29,25 +27,25 @@ data class Reading(
     var cos_l1: Double = 0.0,
     var cos_l2: Double = 0.0,
     var cos_l3: Double = 0.0,
-    var input_EA: Double = 0.0,
-    var return_EA: Double = 0.0,
-    var ind_EQ: Double = 0.0,
-    var cap_EQ: Double = 0.0,
-    var power_DC: Double = 0.0,
-    var voltage_DC: Double = 0.0,
-    var current_DC: Double = 0.0,
+    var input_ea: Double = 0.0,
+    var return_ea: Double = 0.0,
+    var ind_eq: Double = 0.0,
+    var cap_eq: Double = 0.0,
+    var power_dc: Double = 0.0,
+    var voltage_dc: Double = 0.0,
+    var current_dc: Double = 0.0,
     var power_inv: Double = 0.0,
     var reactive_power_inv: Double = 0.0,
     var apparent_power_inv: Double = 0.0,
-    var voltage_UAB_inv: Double = 0.0,
-    var voltage_UBC_inv: Double = 0.0,
-    var voltage_UCA_inv: Double = 0.0,
-    var voltage_UA_inv: Double = 0.0,
-    var voltage_UB_inv: Double = 0.0,
-    var voltage_UC_inv: Double = 0.0,
-    var current_A_inv: Double = 0.0,
-    var current_B_inv: Double = 0.0,
-    var current_C_inv: Double = 0.0,
+    var voltage_uab_inv: Double = 0.0,
+    var voltage_ubc_inv: Double = 0.0,
+    var voltage_uca_inv: Double = 0.0,
+    var voltage_ua_inv: Double = 0.0,
+    var voltage_ub_inv: Double = 0.0,
+    var voltage_uc_inv: Double = 0.0,
+    var current_a_inv: Double = 0.0,
+    var current_b_inv: Double = 0.0,
+    var current_c_inv: Double = 0.0,
     var current_avg_inv: Double = 0.0,
     var frequency_inv: Double = 0.0,
     var cos_inv: Double = 0.0,
@@ -70,16 +68,16 @@ data class Reading(
                     ValueElement("Moc bierna l1:", "kvar", reactive_power_l1.toString()),
                     ValueElement("Moc bierna l2:", "kvar", reactive_power_l2.toString()),
                     ValueElement("Moc bierna l3", "kvar", reactive_power_l3.toString()),
-                    ValueElement("Moc DC:", "W", power_DC.toString())
+                    ValueElement("Moc DC:", "W", power_dc.toString())
                 )
             ),
             Category(
                 "Energie",
                 listOf(
-                    ValueElement("Energia pozorna pobrana:", "kWh", input_EA.toString()),
-                    ValueElement("Energia pozorna oddana:", "kWh", return_EA.toString()),
-                    ValueElement("Energia bierna indukcyjna:", "kvarh", ind_EQ.toString()),
-                    ValueElement("EQ pojemnościowa:", "kvarh", cap_EQ.toString()),
+                    ValueElement("Energia pozorna pobrana:", "kWh", input_ea.toString()),
+                    ValueElement("Energia pozorna oddana:", "kWh", return_ea.toString()),
+                    ValueElement("Energia bierna indukcyjna:", "kvarh", ind_eq.toString()),
+                    ValueElement("EQ pojemnościowa:", "kvarh", cap_eq.toString()),
                     ValueElement("Energia:", "Wh", energy.toString())
                 )
             ),
@@ -92,7 +90,7 @@ data class Reading(
                     ValueElement("Napięcie l1:", "V", voltage_l1.toString()),
                     ValueElement("Napięcie l2:", "V", voltage_l2.toString()),
                     ValueElement("Napięcie l3:", "V", voltage_l3.toString()),
-                    ValueElement("Napięcie DC:", "V", voltage_DC.toString())
+                    ValueElement("Napięcie DC:", "V", voltage_dc.toString())
                 )
             ),
             Category(
@@ -102,7 +100,7 @@ data class Reading(
                     ValueElement("Natężenie l2:", "A", current_l2.toString()),
                     ValueElement("Natężenie l3:", "A", current_l3.toString()),
                     ValueElement("Natężenie n:", "A", current_n.toString()),
-                    ValueElement("Natężenie DC:", "A", current_DC.toString())
+                    ValueElement("Natężenie DC:", "A", current_dc.toString())
                 )
             ),
             Category(
@@ -121,15 +119,15 @@ data class Reading(
                     ValueElement("Moc:", "W", power_inv.toString()),
                     ValueElement("Moc bierna:", "var", reactive_power_inv.toString()),
                     ValueElement("Moc pozorna:", "VA", apparent_power_inv.toString()),
-                    ValueElement("Napięcie AB:", "V", voltage_UAB_inv.toString()),
-                    ValueElement("Napięcie BC:", "V", voltage_UBC_inv.toString()),
-                    ValueElement("Napięcie CA:", "V", voltage_UCA_inv.toString()),
-                    ValueElement("Napięcie A:", "V", voltage_UA_inv.toString()),
-                    ValueElement("Napięcie B:", "V", voltage_UB_inv.toString()),
-                    ValueElement("Napięcie C:", "V", voltage_UC_inv.toString()),
-                    ValueElement("Natężenie A:", "A", current_A_inv.toString()),
-                    ValueElement("Natężenie B:", "A", current_B_inv.toString()),
-                    ValueElement("Natężenie C:", "A", current_C_inv.toString()),
+                    ValueElement("Napięcie AB:", "V", voltage_uab_inv.toString()),
+                    ValueElement("Napięcie BC:", "V", voltage_ubc_inv.toString()),
+                    ValueElement("Napięcie CA:", "V", voltage_uca_inv.toString()),
+                    ValueElement("Napięcie A:", "V", voltage_ua_inv.toString()),
+                    ValueElement("Napięcie B:", "V", voltage_ub_inv.toString()),
+                    ValueElement("Napięcie C:", "V", voltage_uc_inv.toString()),
+                    ValueElement("Natężenie A:", "A", current_a_inv.toString()),
+                    ValueElement("Natężenie B:", "A", current_b_inv.toString()),
+                    ValueElement("Natężenie C:", "A", current_c_inv.toString()),
                     ValueElement("Prąd średni:", "A", current_avg_inv.toString()),
                     ValueElement("Czeęstotliwość:", "HZ", frequency_inv.toString()),
                     ValueElement("Cos:", "", cos_inv.toString()),
@@ -146,71 +144,12 @@ data class Reading(
         return date.replace("T", " ")
     }
 
-    fun getFieldsList(): List<Double> {
-        return listOf(
-            total_power,
-            total_reactive_power,
-            total_apparent_power,
-            power_l1,
-            power_l2,
-            power_l3,
-            reactive_power_l1,
-            reactive_power_l2,
-            reactive_power_l3,
-            voltage_13,
-            voltage_12,
-            voltage_23,
-            voltage_l1,
-            voltage_l2,
-            voltage_l3,
-            current_l1,
-            current_l2,
-            current_l3,
-            current_n,
-            frequency,
-            total_cos,
-            cos_l1,
-            cos_l2,
-            cos_l3,
-            input_EA,
-            return_EA,
-            ind_EQ,
-            cap_EQ,
-            power_DC,
-            voltage_DC,
-            current_DC,
-            power_inv,
-            reactive_power_inv,
-            apparent_power_inv,
-            voltage_UAB_inv,
-            voltage_UBC_inv,
-            voltage_UCA_inv,
-            voltage_UA_inv,
-            voltage_UB_inv,
-            voltage_UC_inv,
-            current_A_inv,
-            current_B_inv,
-            current_C_inv,
-            current_avg_inv,
-            frequency_inv,
-            cos_inv,
-            heat_sink_temp_inv,
-            energy,
-            state_1_inv,
-            state_2_inv
-        )
-    }
+
 }
 
 data class Category(
     val name: String,
     var elements: List<ValueElement>,
     var isExpanded: Boolean = false
-) {
-    fun flattenCategory(): MutableList<Any> {
-        val x = mutableListOf<Any>(this)
-        x.addAll(elements)
-        return x
-    }
-}
+)
 
