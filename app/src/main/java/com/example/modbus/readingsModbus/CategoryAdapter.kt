@@ -19,6 +19,14 @@ class CategoryAdapter(private val categoriesVisible: MutableList<Any>) :
             binding.textView.text = data.name
             binding.executePendingBindings()
         }
+
+        companion object {
+            fun from(parent: ViewGroup): CategoryViewHolder {
+                val inflater = LayoutInflater.from(parent.context)
+                val binding = CatergoryRowLayoutBinding.inflate(inflater, parent, false)
+                return CategoryViewHolder(binding)
+            }
+        }
     }
 
     inner class ReadingViewHolder(private val binding: ReadingRowLayoutBinding) :
@@ -27,20 +35,21 @@ class CategoryAdapter(private val categoriesVisible: MutableList<Any>) :
             binding.valueElement = data
             binding.executePendingBindings()
         }
+
+        companion object {
+            fun from(parent: ViewGroup): ReadingViewHolder {
+                val inflater = LayoutInflater.from(parent.context)
+                val binding = ReadingRowLayoutBinding.inflate(inflater, parent, false)
+                return ReadingViewHolder(binding)
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
         return when (viewType) {
-            R.layout.catergory_row_layout -> {
-                val binding = CatergoryRowLayoutBinding.inflate(inflater)
-                CategoryViewHolder(binding)
-            }
-            R.layout.reading_row_layout -> {
-                val binding = ReadingRowLayoutBinding.inflate(inflater)
-                ReadingViewHolder(binding)
-            }
-            else -> throw Exception("Invalid viewType")
+            R.layout.catergory_row_layout -> CategoryViewHolder.from(parent)
+            R.layout.reading_row_layout -> ReadingViewHolder.from(parent)
+            else -> throw ClassCastException("Invalid viewType")
         }
     }
 
@@ -71,7 +80,6 @@ class CategoryAdapter(private val categoriesVisible: MutableList<Any>) :
                     }
                 }
             }
-            false -> (holder as ReadingViewHolder).bind(row as ValueElement)
         }
     }
 
