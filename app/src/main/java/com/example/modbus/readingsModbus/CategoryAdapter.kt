@@ -11,10 +11,12 @@ import com.example.modbus.databinding.ReadingRowLayoutBinding
 class CategoryAdapter(private val items: MutableList<ReadingItem>) :
     RecyclerView.Adapter<ViewHolder>() {
 
+    lateinit var clickListener: CategoryClickListener
     class CategoryViewHolder(val binding: CatergoryRowLayoutBinding) :
         ViewHolder(binding.root) {
-        fun bind(data: ReadingItem.Category) {
+        fun bind(data: ReadingItem.Category, clickListener: CategoryClickListener) {
             binding.category = data
+            binding.clickListener = clickListener
             binding.executePendingBindings()
         }
 
@@ -59,21 +61,10 @@ class CategoryAdapter(private val items: MutableList<ReadingItem>) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
         when (holder) {
             is CategoryViewHolder -> {
                 val row = items[position] as ReadingItem.Category
-                holder.bind(row)
-                holder.binding.apply {
-                    categoryText.setOnClickListener {
-                        if (row.isExpanded) collapseRow(position)
-                        else expandRow(position)
-                    }
-                    imgArrow.setOnClickListener {
-                        if (row.isExpanded) collapseRow(position)
-                        else expandRow(position)
-                    }
-                }
+                holder.bind(row, clickListener)
             }
             is ReadingViewHolder -> {
                 val row = items[position] as ReadingItem.ValueElement
@@ -107,16 +98,16 @@ class CategoryAdapter(private val items: MutableList<ReadingItem>) :
                         items[i + idx + 1] = element
                     }
                 }
-                else -> {
-                    items[i] = (newData[indexC] as ReadingItem.Category).elements[indexV]
-                    indexV++
-                }
             }
         }
         notifyItemRangeChanged(0, itemCount)
     }
 
     override fun getItemCount(): Int = items.size
+}
+
+class CategoryClickListener(val clickListener: (ReadingItem.Category) -> Unit) {
+    fun onClick(category: ReadingItem.Category) = clickListener(category)
 }
 
 sealed class ReadingItem {

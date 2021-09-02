@@ -30,19 +30,23 @@ class ReadingFragment : Fragment() {
         setHasOptionsMenu(true)
 
         binding.categoryRecycle.adapter = CategoryAdapter(viewModel.data.value ?: mutableListOf())
-        binding.categoryRecycle.layoutManager =
-            LinearLayoutManager(requireActivity().applicationContext)
-        binding.categoryRecycle.setHasFixedSize(true)
+        binding.categoryRecycle.apply {
+            (adapter as CategoryAdapter).clickListener = CategoryClickListener {
+                if (it.isExpanded) {
+                    (adapter as CategoryAdapter).collapseRow(it)
+                } else {
+                    (adapter as CategoryAdapter).expandRow(it)
+                }
+            }
+            layoutManager = LinearLayoutManager(requireActivity().applicationContext)
+            setHasFixedSize(true)
+        }
 
         // Observe the last reading data
-        viewModel.data.observe(
-            viewLifecycleOwner,
-            {
-                (binding.categoryRecycle.adapter as CategoryAdapter).updateData(
-                    viewModel.data.value ?: mutableListOf()
-                )
-                Toast.makeText(activity, "Dane zaktualizowane", Toast.LENGTH_SHORT).show()
-            }
+        viewModel.data.observe(viewLifecycleOwner, {
+            (binding.categoryRecycle.adapter as CategoryAdapter).updateData(it)
+            Toast.makeText(activity, "Dane zaktualizowane", Toast.LENGTH_SHORT).show()
+        }
         )
         viewModel.updateData()
 

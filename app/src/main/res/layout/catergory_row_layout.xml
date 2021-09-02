@@ -8,6 +8,10 @@
         <variable
             name="category"
             type="com.example.modbus.readingsModbus.ReadingItem.Category" />
+
+        <variable
+            name="clickListener"
+            type="com.example.modbus.readingsModbus.CategoryClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -25,6 +29,7 @@
             app:layout_constraintTop_toTopOf="parent"
             style="@style/DataText"
             android:textSize="24sp"
+            android:onClick="@{() -> clickListener.onClick(category)}"
             app:layout_constraintBottom_toTopOf="@+id/divider" />
 
         <ImageView
@@ -41,6 +46,7 @@
             android:layout_marginStart="92dp"
             app:layout_constraintStart_toEndOf="@+id/category_text"
             app:layout_constraintHorizontal_bias="0.705"
+            android:onClick="@{() -> clickListener.onClick(category)}"
             android:contentDescription="@string/expand_the_category" />
 
         <View
