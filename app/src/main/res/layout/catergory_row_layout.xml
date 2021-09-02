@@ -40,7 +40,8 @@
             app:layout_constraintVertical_bias="0.611"
             android:layout_marginStart="92dp"
             app:layout_constraintStart_toEndOf="@+id/category_text"
-            app:layout_constraintHorizontal_bias="0.705" />
+            app:layout_constraintHorizontal_bias="0.705"
+            android:contentDescription="@string/expand_the_category" />
 
         <View
             android:id="@+id/divider"

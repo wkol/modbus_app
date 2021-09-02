@@ -3,6 +3,7 @@
     <string name="reading_value">Obecny pomiar</string>
     <string name="charts_nav">Wykresy</string>
     <string name="start">Początek</string>
+    <string name="expand_the_category">Expand the category</string>
     <string-array name="charts_array">
         <item>P total</item>
         <item>Q total</item>
