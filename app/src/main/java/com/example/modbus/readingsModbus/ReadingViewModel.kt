@@ -16,9 +16,9 @@ import retrofit2.Response
 class ReadingViewModel : ViewModel() {
 
     // Property storing the current reading
-    private val _data: MutableLiveData<MutableList<Any>> =
+    private val _data: MutableLiveData<MutableList<ReadingItem>> =
         MutableLiveData(Reading("2020-01-01T12:00:00").getCategoriesList().toMutableList())
-    val data: LiveData<MutableList<Any>>
+    val data: LiveData<MutableList<ReadingItem>>
         get() = _data
 
     private val _date: MutableLiveData<String> = MutableLiveData("Loading...")

@@ -5,12 +5,12 @@
     <data>
         <variable
             name="valueElement"
-            type="com.example.modbus.networkUtilities.ValueElement" />
+            type="com.example.modbus.readingsModbus.ReadingItem.ValueElement" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/item_label"
@@ -32,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:text="@{valueElement.value}"
+            android:text="@{String.valueOf(valueElement.value)}"
             app:layout_constraintBaseline_toBaselineOf="@+id/item_label"
             app:layout_constraintEnd_toStartOf="@+id/item_unit"
             app:layout_constraintHorizontal_bias="0.127"
