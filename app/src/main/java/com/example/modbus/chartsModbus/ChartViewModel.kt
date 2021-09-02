@@ -4,16 +4,17 @@ import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.modbus.API_DATE_FORMAT
 import com.example.modbus.ChartReading
 import com.example.modbus.convertDateToFloat
 import com.example.modbus.networkUtilities.ModbusEndpoints
 import com.example.modbus.networkUtilities.ServiceBuilder
 import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.utils.EntryXComparator
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
+import java.util.Collections
 
 val LABELS = listOf(
     "Moc czynna z sieci", "Moc bierna z sieci", "Moc pozorna z sieci", "Moc czynna L1",
@@ -152,17 +153,15 @@ class ChartViewModel : ViewModel(), DateListener {
     // Method which updates data to match selected dates
     fun updateDates(data: List<ChartReading>) {
         val newData: MutableList<Entry> = mutableListOf()
-        data.sortedBy {
-            API_DATE_FORMAT.parse(it.date)!!
-        }
         data.forEach { item ->
             newData.add(
                 Entry(
-                    convertDateToFloat(item.date, dateStart.value!!),
+                    convertDateToFloat(item.date, _dateStart.value!!),
                     item.value.toFloat()
                 )
             )
         }
+        Collections.sort(newData, EntryXComparator())
         _chartData.value = newData
         _loading.value = View.GONE
     }
