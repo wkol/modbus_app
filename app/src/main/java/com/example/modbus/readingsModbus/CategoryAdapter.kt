@@ -82,29 +82,30 @@ class CategoryAdapter(private val items: MutableList<ReadingItem>) :
         }
     }
 
-    private fun expandRow(position: Int) {
-        val row = items[position] as ReadingItem.Category
-        items.addAll(position + 1, row.elements)
-        row.isExpanded = true
-        notifyItemRangeInserted(position + 1, row.elements.size)
+    fun expandRow(category: ReadingItem.Category) {
+        val position = items.indexOf(category)
+        items.addAll(position + 1, category.elements)
+        notifyItemRangeInserted(position + 1, category.elements.size)
+        category.isExpanded = true
     }
 
-    private fun collapseRow(position: Int) {
-        val row = items[position] as ReadingItem.Category
-        items.removeAll(row.elements)
-        notifyItemRangeRemoved(position + 1, row.elements.size)
-        row.isExpanded = false
+    fun collapseRow(category: ReadingItem.Category) {
+        val position = items.indexOf(category)
+        items.subList(position + 1, position + category.elements.size + 1).clear()
+        notifyItemRangeRemoved(position + 1, category.elements.size)
+        category.isExpanded = false
     }
 
     fun updateData(newData: List<ReadingItem>) {
         var indexC = -1
-        var indexV = 0
-        for ((i, item) in items.withIndex()) {
-            when (item) {
-                is ReadingItem.Category -> {
-                    indexC++
-                    indexV = 0
-                    item.elements = (newData[indexC] as ReadingItem.Category).elements
+        items.forEachIndexed { i, item ->
+            if (item is ReadingItem.Category) {
+                indexC++
+                item.elements = (newData[indexC] as ReadingItem.Category).elements
+                if (item.isExpanded) {
+                    item.elements.forEachIndexed { idx, element ->
+                        items[i + idx + 1] = element
+                    }
                 }
                 else -> {
                     items[i] = (newData[indexC] as ReadingItem.Category).elements[indexV]
