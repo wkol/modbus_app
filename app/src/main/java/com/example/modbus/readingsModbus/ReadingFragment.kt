@@ -31,11 +31,13 @@ class ReadingFragment : Fragment() {
 
         binding.categoryRecycle.adapter = CategoryAdapter(viewModel.data.value ?: mutableListOf())
         binding.categoryRecycle.apply {
-            (adapter as CategoryAdapter).clickListener = CategoryClickListener {
-                if (it.isExpanded) {
-                    (adapter as CategoryAdapter).collapseRow(it)
+            (adapter as CategoryAdapter).clickListener = CategoryClickListener { category, arrow ->
+                if (category.isExpanded) {
+                    (adapter as CategoryAdapter).collapseRow(category)
+                    arrow.animate().setDuration(100).rotation(0F).start()
                 } else {
-                    (adapter as CategoryAdapter).expandRow(it)
+                    (adapter as CategoryAdapter).expandRow(category)
+                    arrow.animate().setDuration(100).rotation(180F).start()
                 }
             }
             layoutManager = LinearLayoutManager(requireActivity().applicationContext)

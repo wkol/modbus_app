@@ -1,6 +1,7 @@
 package com.example.modbus.readingsModbus
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
@@ -97,17 +98,19 @@ class CategoryAdapter(private val items: MutableList<ReadingItem>) :
                     item.elements.forEachIndexed { idx, element ->
                         items[i + idx + 1] = element
                     }
+                    notifyItemRangeChanged(i + 1, item.elements.size)
                 }
             }
         }
-        notifyItemRangeChanged(0, itemCount)
     }
 
     override fun getItemCount(): Int = items.size
 }
 
-class CategoryClickListener(val clickListener: (ReadingItem.Category) -> Unit) {
-    fun onClick(category: ReadingItem.Category) = clickListener(category)
+class CategoryClickListener(val clickListener: (ReadingItem.Category, View) -> Unit) {
+    fun onClick(category: ReadingItem.Category, arrow: View) {
+        clickListener(category, arrow)
+    }
 }
 
 sealed class ReadingItem {
