@@ -16,7 +16,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:onClick="@{() -> clickListener.onClick(category, imgArrow)}">
 
         <TextView
             android:id="@+id/category_text"
@@ -29,7 +30,6 @@
             app:layout_constraintTop_toTopOf="parent"
             style="@style/DataText"
             android:textSize="24sp"
-            android:onClick="@{(imgArrow) -> clickListener.onClick(category, imgArrow)}"
             app:layout_constraintBottom_toTopOf="@+id/divider" />
 
         <ImageView
@@ -46,7 +46,6 @@
             android:layout_marginStart="92dp"
             app:layout_constraintStart_toEndOf="@+id/category_text"
             app:layout_constraintHorizontal_bias="0.705"
-            android:onClick="@{(imgArrow) -> clickListener.onClick(category, imgArrow)}"
             android:contentDescription="@string/expand_the_category" />
 
         <View
